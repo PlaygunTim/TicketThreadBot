@@ -1,17 +1,17 @@
 {
-  "name": "discord-js-handler-template",
+  "name": "thread-ticket-bot",
   "version": "1.0.0",
-  "description": "Discord.js Command and Event Handler Template with example Command usages!",
+  "description": "A discord ticket bot that is build off threads",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "Tomato#6966 (author of this template)",
-  "license": "ISC",
+  "author": "PlaygunTim",
+  "license": "MIT",
   "dependencies": {
     "ascii-table": "0.0.9",
-    "discord.js": "^12.5.1"
+    "discord.js": "^13.1.0"
   },
   "devDependencies": {
     "ascii-table": "0.0.9",
