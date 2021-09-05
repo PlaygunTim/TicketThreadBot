@@ -16,7 +16,7 @@ const commandFiles = fs
   .filter((file) => file.endsWith('.js')); // js instead of ts because the file is read after files are built
 
 for (const file of commandFiles) {
-  const command = require(`./commands/${file}`) as StoredCommand;
+  const command = require(`./commands/${file}`) as StoredCommand; // eslint-disable-line @typescript-eslint/no-var-requires
   commands.push(command.data.toJSON());
 }
 const rest = new REST({ version: '9' }).setToken(token);
