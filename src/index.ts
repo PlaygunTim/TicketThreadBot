@@ -1,35 +1,54 @@
 // Require the necessary discord.js classes
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, Collection } from 'discord.js';
 import { token } from './config.json';
+import fs from 'fs';
+import { StoredCommand } from './types';
+const buildDir = 'dist'; // The build directory
 
-// Create a new client instance
+/* Parse the ./commands directory for commands
+Each file should have an export in the format of StoredCommand */
+
+const commands: Collection<string, StoredCommand> = new Collection();
+
+const commandFiles = fs
+  .readdirSync(`./${buildDir}/commands`)
+  .filter((file) => file.endsWith('.js')); // js instead of ts because the file is read after files are built
+
+for (const file of commandFiles) {
+  const command = require(`./commands/${file}`) as StoredCommand;
+  // With the key as the command name and the value as the exported module
+  commands.set(command.data.name, command);
+}
+
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [Intents.FLAGS.GUILDS], // The guild intent is required to maintain a guild cache
 });
 
-// When the client is ready
 client.once('ready', () => {
   console.log('Ready!');
 });
-// Prefix bc of course dummy
-const prefix = '!';
-// Ping Message with comeback and Latency
-client.on('message', function (message) {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(prefix)) return;
 
-  const commandBody = message.content.slice(prefix.length);
-  console.log(commandBody);
-  const args = commandBody.split(' ');
-  const commandName = args.shift();
-  if (!commandName) {
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const command = commands.get(interaction.commandName);
+
+  if (!command) {
+    await interaction.reply({
+      content: 'That command could not be found!',
+      ephemeral: true,
+    });
     return;
   }
-  const command = commandName.toLowerCase();
 
-  if (command === 'ping') {
-    const timeTaken = Date.now() - message.createdTimestamp;
-    message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
+  try {
+    await command.execute(interaction);
+  } catch (error: any) {
+    console.error(error);
+    await interaction.reply({
+      content: `There was an error while executing this command!\nError: ${error.message}`,
+      ephemeral: true,
+    });
   }
 });
 
