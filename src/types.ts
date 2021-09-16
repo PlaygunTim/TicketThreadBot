@@ -1,8 +1,10 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
+import { ButtonStyle } from 'discord-api-types';
 import {
   CommandInteraction,
   ButtonInteraction,
   MessageButton,
+  MessageButtonStyle,
 } from 'discord.js';
 
 interface StoredCommand {
@@ -21,4 +23,10 @@ interface ButtonOptions {
   extraArg: string;
 }
 
-export { StoredCommand, StoredButton, ButtonOptions };
+interface TicketConfig {
+  name: string;
+  message: string;
+  style: MessageButtonStyle;
+}
+
+export { StoredCommand, StoredButton, ButtonOptions, TicketConfig };

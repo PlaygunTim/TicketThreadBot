@@ -1,5 +1,17 @@
 {
   "token": "",
   "clientId": "",
-  "guildId": null
+  "guildId": "",
+  "ticketTypes": [
+    {
+      "name": "admin",
+      "message": "Admin ticket created <@&adminrole> {{user}}",
+      "style": "DANGER"
+    },
+    {
+      "name": "mod",
+      "message": "Mod ticket created <@&modrole> {{user}}",
+      "style": "SECONDARY"
+    }
+  ]
 }

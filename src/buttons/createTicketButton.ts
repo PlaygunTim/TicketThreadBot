@@ -1,13 +1,24 @@
-import { MessageButton, TextChannel } from 'discord.js';
-import { createTicket } from '../threads';
+import {
+  MessageButton,
+  MessageButtonStyleResolvable,
+  TextChannel,
+} from 'discord.js';
+import { createTicket } from '../tickets';
 import { ButtonOptions } from '../types';
-const generateButtonData = (ticketType: string): MessageButton => {
+type generateButtonDataOptions = {
+  ticketType: string;
+  style: MessageButtonStyleResolvable;
+};
+const generateButtonData = ({
+  ticketType,
+  style,
+}: generateButtonDataOptions): MessageButton => {
   if (ticketType.includes(':'))
     throw new Error('Ticket type cannot contain the character ":"!');
   const button = new MessageButton()
     .setCustomId(`create-ticket:${ticketType}`)
     .setLabel(`Open ${ticketType}`)
-    .setStyle('PRIMARY');
+    .setStyle(style);
   return button;
 };
 
