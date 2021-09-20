@@ -47,4 +47,5 @@ const execute = async ({
 
 const baseArg = 'create-ticket';
 const guildOnly = true;
-export { generateButtonData, baseArg, guildOnly, execute };
+const cooldown = 60;
+export { generateButtonData, baseArg, guildOnly, cooldown, execute };

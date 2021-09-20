@@ -8,13 +8,25 @@ import {
 } from 'discord.js';
 import { token } from './config.json';
 import fs from 'fs';
-import { StoredButton, StoredCommand } from './types';
+import {
+  StoredButton,
+  StoredCommand,
+  CooldownsType,
+  MessageError,
+} from './types';
+import { Snowflake } from 'discord-api-types/v9';
+import { checkCooldown } from './cooldowns';
 const buildDir = 'dist'; // The build directory
 
 /* Parse the ./commands directory for commands
 Each file should have an export in the format of StoredCommand */
 
 const commands: Collection<string, StoredCommand> = new Collection();
+const buttons: Collection<string, StoredButton> = new Collection();
+const cooldowns: CooldownsType = {
+  commands: new Collection(),
+  buttons: new Collection(),
+};
 
 const commandFiles = fs
   .readdirSync(`./${buildDir}/commands`)
@@ -25,8 +37,6 @@ for (const file of commandFiles) {
   // With the key as the command name and the value as the exported module
   commands.set(command.data.name, command);
 }
-
-const buttons: Collection<string, StoredButton> = new Collection();
 
 const buttonFiles = fs
   .readdirSync(`./${buildDir}/buttons`)
@@ -48,31 +58,32 @@ client.once('ready', () => {
 
 const handleInteractionError = async (
   interaction: MessageComponentInteraction | CommandInteraction,
-  error: Error,
+  error: Error | MessageError,
 ) => {
-  console.error(error);
+  let message: string;
+  if ('internal' in error) {
+    message = error.message;
+  } else {
+    // If is MessageError then this is used to send an expected error to the user
+    console.error(error);
+    message = `There was an error while executing this interaction!\nError: ${error.message}`;
+  }
   /* If the interaction is in a deferred loading state it will be "deferred" but not "replied" and so update the loading message
-      If the interaction is not deferred or replied to then reply to it
-      Otherwise the interaction has been replied to so send a followup
-      */
+    If the interaction is not deferred or replied to then reply to it
+    Otherwise the interaction has been replied to so send a followup
+  */
   if (interaction.deferred && !interaction.replied) {
     await interaction.editReply({
-      content: `There was an error while executing this button!\nError: ${
-        (error as Error).message
-      }`,
+      content: message,
     });
   } else if (!interaction.replied) {
     await interaction.reply({
-      content: `There was an error while executing this button!\nError: ${
-        (error as Error).message
-      }`,
+      content: message,
       ephemeral: true,
     });
   } else {
     await interaction.followUp({
-      content: `There was an error while executing this button!\nError: ${
-        (error as Error).message
-      }`,
+      content: message,
       ephemeral: true,
     });
   }
@@ -89,8 +100,15 @@ client.on('interactionCreate', async (interaction) => {
       });
       return;
     }
-
     try {
+      if (command.cooldown) {
+        await checkCooldown(
+          interaction.commandName,
+          cooldowns.commands,
+          command.cooldown,
+          interaction.user.id,
+        );
+      }
       await command.execute(interaction);
     } catch (error) {
       await handleInteractionError(interaction, error as Error);
@@ -119,6 +137,14 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     try {
+      if (button.cooldown) {
+        await checkCooldown(
+          `${interaction.guildId}-${interaction.message.id}-${interaction.customId}`,
+          cooldowns.buttons,
+          button.cooldown,
+          interaction.user.id,
+        );
+      }
       await button.execute({ interaction, extraArg });
     } catch (error) {
       await handleInteractionError(interaction, error as Error);
