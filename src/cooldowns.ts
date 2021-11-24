@@ -20,7 +20,7 @@ export const checkCooldown = async (
       const timeLeft = (expirationTime - now) / 1000;
       throw new MessageError(
         `You've hit one of our ratelimits! Please wait ${timeLeft.toFixed(
-          1,
+          0,
         )} more second(s) before reusing the command.`,
       );
     }
