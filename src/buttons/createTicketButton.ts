@@ -1,10 +1,13 @@
 import {
+  GuildMemberRoleManager,
   MessageButton,
   MessageButtonStyleResolvable,
   TextChannel,
 } from 'discord.js';
 import { createTicket } from '../tickets';
-import { ButtonOptions } from '../types';
+import { ButtonOptions, MessageError } from '../types';
+import { barredRoleId, barredMessage, ticketChannelId } from '../config.json';
+
 type generateButtonDataOptions = {
   ticketType: string;
   style: MessageButtonStyleResolvable;
@@ -24,21 +27,39 @@ const generateButtonData = ({
 
 const execute = async ({
   interaction,
-  extraArg,
+  ticketType,
 }: ButtonOptions): Promise<void> => {
   await interaction.deferReply({ ephemeral: true });
-  const channel = interaction.channel;
+
+  if (!interaction.guild || !interaction.member)
+    throw new MessageError('This command must be used in a guild');
+
+  const channel = interaction.guild.channels.cache.get(ticketChannelId);
+
   if (!channel) {
-    throw new Error('`interaction.channel` should be defined');
+    throw new Error('Could not find the ticket channel!');
   }
   if (!(channel instanceof TextChannel)) {
     throw new Error('Tickets cannot be created in news channels!');
   }
 
+  let hasBarredRole = false;
+  if (interaction.member.roles instanceof GuildMemberRoleManager) {
+    hasBarredRole = interaction.member.roles.cache.get(barredRoleId)
+      ? true
+      : false;
+  } else {
+    hasBarredRole = interaction.member.roles.includes(barredRoleId);
+  }
+  if (hasBarredRole) {
+    throw new MessageError(barredMessage);
+  }
+
   await createTicket({
     channel,
     userId: interaction.user.id,
-    ticketType: extraArg,
+    ticketType: ticketType,
+    userDisplayName: interaction.user.username,
   });
   await interaction.editReply({
     content: 'Ticket has been created! You may dismiss this message',

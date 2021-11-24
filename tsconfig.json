@@ -18,6 +18,7 @@
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
 
+    "lib": ["esnext"],
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }

@@ -1,5 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ButtonStyle, Snowflake } from 'discord-api-types/v9';
+import {
+  APIApplicationCommandPermission,
+  ButtonStyle,
+  Snowflake,
+} from 'discord-api-types/v9';
 import {
   CommandInteraction,
   ButtonInteraction,
@@ -20,8 +24,10 @@ class MessageError extends Error {
 }
 
 interface StoredCommand {
-  data: SlashCommandBuilder;
+  data: any; // Got confused with options
   cooldown?: number;
+  guildOnly: boolean;
+  permissions?: APIApplicationCommandPermission[];
   execute: (interaction: CommandInteraction) => Promise<unknown>;
 }
 
@@ -34,7 +40,7 @@ interface StoredButton {
 }
 interface ButtonOptions {
   interaction: ButtonInteraction;
-  extraArg: string;
+  ticketType: string;
 }
 
 interface TicketConfig {

@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Ticket {
+  id String @unique
+  textId String
+  userId String
+  ticketType String
+  locked Boolean @default(false)
+  modGeneratedById String?
+  lockAt DateTime?
+  closeReason CloseReason?
+  closeDescription String?
+}
+
+
+enum CloseReason {
+  CHAT_REPORT
+  VC_REPORT
+  DMS_REPORT
+  OFF_PLATFORM_REPORT
+  OTHER_REPORT
+  MOD_GENERATED_CHAT_INTERVENTION
+  MOD_GENERATED_VC_INTERVENTION
+  MOD_GENERATED_DMS_INTERVENTION
+  MOD_GENERATED_PROFILE_INTERVENTION
+  MOD_GENERATED_OFF_PLATFORM_INTERVENTION
+  SPAM_TICKET
+  INVALID_TICKET
+  SUGGESTION
+  MODERATION_COMPLAINT
+  EVENT
+  GREETER_ENQUIRY
+  STAFF_APP_ENQUIRY
+  OTHER
+}
