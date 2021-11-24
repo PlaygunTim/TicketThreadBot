@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  bot:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    volumes:
+      - ./src:/home/node/app/src
+    container_name: docker
+    command: >
+      sh -c "npm run migrate && npm run start"
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password # Should be changed here and in .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data: {}

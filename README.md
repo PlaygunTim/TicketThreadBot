@@ -40,6 +40,8 @@ Run `npm run build` to build to `dist/index.js` and `npm start` to run.
 
 To deploy the slash commands run `npm run go:deploy`. - This only needs to be done once and after commands are updated
 
+To deploy to a production environment use `docker-compose up`
+
 ## Code Style
 
 - Run prettier with `npm run format`
