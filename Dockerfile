@@ -12,5 +12,5 @@ FROM base as production
 
 ENV NODE_PATH=./dist
 
-RUN npm run build
 RUN npx prisma generate
+RUN npm run build
