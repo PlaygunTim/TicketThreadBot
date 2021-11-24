@@ -1,5 +1,26 @@
 {
   "token": "",
   "clientId": "",
-  "guildId": null
+  "guildId": "",
+  "modRoleId": "",
+  "barredRoleId": "",
+  "barredMessage": "You have been barred from creating tickets. This is likely due to abusive or spam like behavior when using the ticket system.\n Please reach out directly to the mods for your concern.",
+  "ticketTypes": [
+    {
+      "name": "general",
+      "message": "Ticket created <@&> {{user}}",
+      "style": "PRIMARY"
+    },
+    {
+      "name": "event",
+      "message": "Event ticket created <@&> {{user}}",
+      "style": "SUCCESS"
+    }
+  ],
+  "generatedTicketType": "general",
+  "generatedMessage": "{{user}}, {{creator}} created a ticket. <@&>",
+  "lockTime": 10000,
+  "buttonsMessage": "Click to open a ticket!",
+  "ticketChannelId": "",
+  "autoArchiveDuration": 10080
 }
