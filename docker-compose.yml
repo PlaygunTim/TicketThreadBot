@@ -9,7 +9,7 @@ services:
       target: production
     volumes:
       - ./src:/home/node/app/src
-    container_name: docker
+    container_name: ticket_bot
     command: >
       sh -c "npm run migrate && npm run start"
   postgres:
