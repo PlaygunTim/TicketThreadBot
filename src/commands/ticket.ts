@@ -16,6 +16,7 @@ import {
   generatedTicketType,
   ticketTypes,
   ticketChannelId,
+  buttonsMessage,
 } from '../config.json';
 import { generateButtonData } from '../buttons/createTicketButton';
 const commandData: StoredCommand = {
@@ -156,7 +157,7 @@ const commandData: StoredCommand = {
           );
         });
         await interaction.channel.send({
-          content: 'Click to open tickets',
+          content: buttonsMessage,
           components: [row],
         });
         await interaction.editReply({
