@@ -116,7 +116,10 @@ const createTicket = async ({
       content: messageString,
     });
     await sendLog({
-      title: 'Ticket created',
+      title: `${ticketData.name.replace(
+        /\w\S*/g,
+        (w) => w.replace(/^\w/, (c) => c.toUpperCase()), // Capitalize first letter
+      )} ticket created`,
       client: channel.client,
       ticketId: thread.id,
       userId: userId, // This is the Action By field
