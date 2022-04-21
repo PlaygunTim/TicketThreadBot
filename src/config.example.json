@@ -22,5 +22,7 @@
   "lockTime": 10000,
   "buttonsMessage": "Click to open a ticket!",
   "ticketChannelId": "",
-  "autoArchiveDuration": 10080
+  "autoArchiveDuration": 10080,
+  "anonymousUser": "The string to show on anon messages",
+  "logChannelId": "private channel for logs"
 }
