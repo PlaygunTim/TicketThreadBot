@@ -1,5 +1,5 @@
 import Collection from '@discordjs/collection';
-import { Snowflake } from 'discord-api-types';
+import { Snowflake } from 'discord-api-types/v9';
 import { CooldownCollection, MessageError } from './types';
 export const checkCooldown = async (
   commandName: string,

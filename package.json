@@ -10,18 +10,19 @@
     "start": "NODE_PATH=./dist node dist/index.js",
     "start:deploy": "NODE_PATH=./dist node dist/deploy-commands.js",
     "lint": "eslint --max-warnings=0 'src/**/*.{js,ts}' && prettier --check '*.{json,js}' 'src/**/*.{js,ts}'",
-    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'"
+    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}'",
+    "go": "npm run build && npm run start"
   },
   "author": "PlaygunTim",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/builders": "^0.6.0",
-    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
     "@prisma/client": "^3.0.2",
     "ascii-table": "0.0.9",
     "axios": "^0.24.0",
-    "discord-api-types": "^0.23.1",
-    "discord.js": "^13.3.1"
+    "discord-api-types": "^0.31.2",
+    "discord.js": "^13.6.0"
   },
   "devDependencies": {
     "@types/node": "^16.9.4",

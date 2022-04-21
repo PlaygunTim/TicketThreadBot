@@ -10,6 +10,7 @@ import {
   MessageButton,
   MessageButtonStyle,
   Collection,
+  Client,
 } from 'discord.js';
 
 type InteractionCooldown = Collection<Snowflake, number>;
@@ -28,7 +29,10 @@ interface StoredCommand {
   cooldown?: number;
   guildOnly: boolean;
   permissions?: APIApplicationCommandPermission[];
-  execute: (interaction: CommandInteraction) => Promise<unknown>;
+  execute: (
+    interaction: CommandInteraction,
+    client: Client,
+  ) => Promise<unknown>;
 }
 
 interface StoredButton {

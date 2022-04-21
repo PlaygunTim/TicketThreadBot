@@ -132,7 +132,7 @@ const main = () => {
             interaction.user.id,
           );
         }
-        await command.execute(interaction);
+        await command.execute(interaction, client);
       } catch (error) {
         await handleInteractionError(interaction, error as Error);
       }
