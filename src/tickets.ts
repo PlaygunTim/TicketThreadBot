@@ -54,6 +54,7 @@ const createTicket = async ({
     //type: 'GUILD_PRIVATE_THREAD', // Uncomment this when in production, in testing private threads cannot be used
     type: 'GUILD_PUBLIC_THREAD',
     reason: `User (${userId}) created a ${ticketType} ticket.`,
+    invitable: false,
   });
 
   await prisma.ticket.create({
